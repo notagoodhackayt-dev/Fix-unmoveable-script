@@ -1531,6 +1531,8 @@ minimizeBtn.TextColor3 = Color3.fromRGB(255,255,255)
 minimizeBtn.Font = Enum.Font.GothamBold
 minimizeBtn.TextSize = 18
 minimizeBtn.Visible = false
+minimizeBtn.Active = true
+minimizeBtn.Draggable = true
 minimizeBtn.Parent = gui
 
 local minimizeCorner = Instance.new("UICorner", minimizeBtn)
