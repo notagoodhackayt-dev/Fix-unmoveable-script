@@ -1,1 +1,1 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/notagoodhackayt-dev/Fix-unmoveable-script/refs/heads/main/Test2?token=GHSAT0AAAAAAEL6W2KWLMPFDDMFQHGULUPM2WKWYSA"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/notagoodhackayt-dev/Fix-unmoveable-script/refs/heads/main/Test2"))()
