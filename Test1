@@ -1326,21 +1326,34 @@ end)
 		row.Parent = scroll
 		Instance.new("UICorner",row)
 
-		local label = Instance.new("TextLabel")
-		label.Size = UDim2.new(.6,0,1,0)
-		label.BackgroundTransparency = 1
-		label.Text = outfit.Name
-		label.TextColor3 = Color3.new(1,1,1)
-		label.Font = Enum.Font.GothamBold
-		label.TextSize = 15
-		label.Parent = row
+		local nameBox = Instance.new("TextBox")
+nameBox.Size = UDim2.new(1,-10,0,28)
+nameBox.Position = UDim2.new(0,5,0,3)
+nameBox.BackgroundColor3 = Color3.fromRGB(55,55,55)
+nameBox.Text = outfit.Name or "Outfit"
+nameBox.PlaceholderText = "Enter outfit name"
+nameBox.TextColor3 = Color3.new(1,1,1)
+nameBox.Font = Enum.Font.GothamBold
+nameBox.TextSize = 15
+nameBox.ClearTextOnFocus = false
+nameBox.TextXAlignment = Enum.TextXAlignment.Center
+nameBox.Parent = row
 
-row.Size = UDim2.new(0,260,0,75)
+Instance.new("UICorner",nameBox)
 
-label.Size = UDim2.new(1,-10,0,28)
-label.Position = UDim2.new(0,5,0,3)
-label.TextXAlignment = Enum.TextXAlignment.Center
+nameBox.FocusLost:Connect(function()
+    local newName = nameBox.Text:match("^%s*(.-)%s*$")
 
+    if newName == "" then
+        nameBox.Text = outfit.Name
+        return
+    end
+
+    outfit.Name = newName
+    nameBox.Text = newName
+
+    SaveOutfits()
+end)
 local equip = Instance.new("TextButton")
 equip.Size = UDim2.new(.45,-5,0,30)
 equip.Position = UDim2.new(0.03,0,0,38)
