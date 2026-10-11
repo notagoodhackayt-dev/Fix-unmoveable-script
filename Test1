@@ -1113,7 +1113,6 @@ outfitNameBox.Active = true
 outfitNameBox.Selectable = true
 outfitNameBox.ZIndex = 10
 outfitNameBox.Parent = frame
-outfitNameBox:CaptureFocus()
 
         Instance.new("UICorner", outfitNameBox).CornerRadius =
             UDim.new(0, 6)
@@ -1270,7 +1269,7 @@ if currentAssetType == "Outfits" then
 	scroll.CanvasPosition = Vector2.zero
 
 	local save = Instance.new("TextButton")
-	save.Size = UDim2.new(0,220,0,40)
+	row.Size = UDim2.new(0,260,0,75)
 	save.BackgroundColor3 = Color3.fromRGB(45,45,45)
 	save.Text = "Save Current Outfit"
 	save.TextColor3 = Color3.new(1,1,1)
@@ -1281,19 +1280,13 @@ if currentAssetType == "Outfits" then
 	Instance.new("UICorner",save)
 
 	save.MouseButton1Click:Connect(function()
-
-    local outfitName = ""
-
-    if outfitNameBox and outfitNameBox.Parent then
-        outfitName = outfitNameBox.Text
+    -- Release focus so typing doesn't go to another TextBox.
+    local focusedBox = UserInputService:GetFocusedTextBox()
+    if focusedBox then
+        focusedBox:ReleaseFocus()
     end
 
-    outfitName = outfitName:match("^%s*(.-)%s*$")
-
-    if outfitName == "" then
-        outfitName = "Outfit " .. (#SavedOutfits + 1)
-    end
-
+    local outfitName = "Outfit " .. (#SavedOutfits + 1)
     local outfitData = GetCurrentOutfit()
 
     if not outfitData then
@@ -1312,13 +1305,13 @@ if currentAssetType == "Outfits" then
 
     if not success then
         warn("Could not save outfits: " .. tostring(err))
+        return
     end
 
     loadMore(true)
-
 end)
-
-	for i,outfit in ipairs(SavedOutfits) do
+	
+for i,outfit in ipairs(SavedOutfits) do
 
 		local row = Instance.new("Frame")
 		row.Size = UDim2.new(0,260,0,40)
