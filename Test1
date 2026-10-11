@@ -1,4 +1,4 @@
--- Made by ban_thid
+-- Made by ban_thid and fixed up by notagoodhackayt
 -- Are you here to steal this?
 
 local Players = game:GetService("Players")
@@ -254,6 +254,8 @@ local updateWearing
 local currentQuery = ""
 local currentAssetType = Enum.AvatarAssetType.Shirt
 local loading = false
+
+local outfitNameBox = nil
 
 local BundlesContainer = game:GetObjects(getcustomasset("RBundles.rbxmx"))[1]
 
@@ -1086,7 +1088,32 @@ loadMore = function(reset)
 	loading = true
 
 	if reset then
-		clearItems()
+        clearItems()
+
+    if outfitNameBox then
+        outfitNameBox:Destroy()
+        outfitNameBox = nil
+    end
+
+    searchBar.Visible = currentAssetType ~= "Outfits"
+    clearSearchBtn.Visible = currentAssetType ~= "Outfits"
+
+    if currentAssetType == "Outfits" then
+        outfitNameBox = Instance.new("TextBox")
+        outfitNameBox.Size = UDim2.new(0.55, 0, 0, 30)
+        outfitNameBox.Position = UDim2.new(0.15, 0, 0, 50)
+        outfitNameBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        outfitNameBox.TextColor3 = Color3.new(1, 1, 1)
+        outfitNameBox.PlaceholderText = "Enter outfit name..."
+        outfitNameBox.Text = ""
+        outfitNameBox.Font = Enum.Font.Gotham
+        outfitNameBox.TextSize = 14
+        outfitNameBox.ClearTextOnFocus = false
+        outfitNameBox.Parent = frame
+
+        Instance.new("UICorner", outfitNameBox).CornerRadius =
+            UDim.new(0, 6)
+    end
 
    scroll.Visible = true
    bodyFrame.Visible = false
@@ -1251,15 +1278,25 @@ if currentAssetType == "Outfits" then
 
 	save.MouseButton1Click:Connect(function()
 
-		table.insert(SavedOutfits,{
-			Name = "Outfit "..#SavedOutfits + 1,
-			Data = GetCurrentOutfit()
-		})
+    local outfitName = "Outfit " .. (#SavedOutfits + 1)
 
-		SaveOutfits()
-		loadMore(true)
+    if outfitNameBox then
+        local typedName = outfitNameBox.Text:match("^%s*(.-)%s*$")
 
-	end)
+        if typedName and typedName ~= "" then
+            outfitName = typedName
+        end
+    end
+
+    table.insert(SavedOutfits, {
+        Name = outfitName,
+        Data = GetCurrentOutfit()
+    })
+
+    SaveOutfits()
+    loadMore(true)
+
+end)
 
 	for i,outfit in ipairs(SavedOutfits) do
 
@@ -1526,7 +1563,7 @@ local minimizeBtn = Instance.new("TextButton")
 minimizeBtn.Size = UDim2.new(0,50,0,50)
 minimizeBtn.Position = UDim2.new(0,20,1,-70)
 minimizeBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-minimizeBtn.Text = "Rob"
+minimizeBtn.Text = "PG🪐"
 minimizeBtn.TextColor3 = Color3.fromRGB(255,255,255)
 minimizeBtn.Font = Enum.Font.GothamBold
 minimizeBtn.TextSize = 18
