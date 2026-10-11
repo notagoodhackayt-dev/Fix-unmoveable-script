@@ -1109,7 +1109,11 @@ loadMore = function(reset)
         outfitNameBox.Font = Enum.Font.Gotham
         outfitNameBox.TextSize = 14
         outfitNameBox.ClearTextOnFocus = false
-        outfitNameBox.Parent = frame
+outfitNameBox.Active = true
+outfitNameBox.Selectable = true
+outfitNameBox.ZIndex = 10
+outfitNameBox.Parent = frame
+outfitNameBox:CaptureFocus()
 
         Instance.new("UICorner", outfitNameBox).CornerRadius =
             UDim.new(0, 6)
@@ -1278,22 +1282,38 @@ if currentAssetType == "Outfits" then
 
 	save.MouseButton1Click:Connect(function()
 
-    local outfitName = "Outfit " .. (#SavedOutfits + 1)
+    local outfitName = ""
 
-    if outfitNameBox then
-        local typedName = outfitNameBox.Text:match("^%s*(.-)%s*$")
+    if outfitNameBox and outfitNameBox.Parent then
+        outfitName = outfitNameBox.Text
+    end
 
-        if typedName and typedName ~= "" then
-            outfitName = typedName
-        end
+    outfitName = outfitName:match("^%s*(.-)%s*$")
+
+    if outfitName == "" then
+        outfitName = "Outfit " .. (#SavedOutfits + 1)
+    end
+
+    local outfitData = GetCurrentOutfit()
+
+    if not outfitData then
+        warn("Could not save outfit data.")
+        return
     end
 
     table.insert(SavedOutfits, {
         Name = outfitName,
-        Data = GetCurrentOutfit()
+        Data = outfitData
     })
 
-    SaveOutfits()
+    local success, err = pcall(function()
+        SaveOutfits()
+    end)
+
+    if not success then
+        warn("Could not save outfits: " .. tostring(err))
+    end
+
     loadMore(true)
 
 end)
